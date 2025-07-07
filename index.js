@@ -99,8 +99,12 @@ app.all("*", (req, res) => {
 app.use((err, req, res, next) => {
   console.log(err);
   let { statusCode = 500, message = "Something went wrong" } = err;
-  res.status(statusCode).render("notes/error.ejs", { message });
+  res.status(statusCode).render("notes/error.ejs", {
+    title: "Something went wrong",
+    message,
+  });
 });
+
 
 app.listen(process.env.PORT, () => {
   console.log(
