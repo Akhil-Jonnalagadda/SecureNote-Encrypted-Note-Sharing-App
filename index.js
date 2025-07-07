@@ -19,6 +19,10 @@ const pagesRouter = require("./routes/pagesRouter.js");
 const userRouter = require("./routes/userRouter.js");
 const User = require("./models/user.js");
 
+// Debug: Print the ATLAS_URL to verify it's loaded
+console.log("ATLAS_URL:", process.env.ATLAS_URL);
+
+// Synchronous MongoStore initialization for connect-mongo v5
 const mongodbStore = MongoStore.create({
   mongoUrl: process.env.ATLAS_URL,
   crypto: {
@@ -27,7 +31,7 @@ const mongodbStore = MongoStore.create({
   touchAfter: 24 * 60 * 60,
 });
 
-mongodbStore.on("error", () => {
+mongodbStore.on("error", (err) => {
   console.log("ERROR in MONGO SESSION STORE", err);
 });
 
@@ -42,6 +46,8 @@ const sessionOptions = {
     httpOnly: true,
   },
 };
+
+app.use(session(sessionOptions));
 
 async function main() {
   await mongoose.connect(process.env.ATLAS_URL);
@@ -61,7 +67,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use(session(sessionOptions));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(cors());
