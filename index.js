@@ -106,8 +106,9 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, '0.0.0.0', () => {
   console.log(
-    `Server is listening to ${process.env.HOST_URL}:${process.env.PORT} \n`
+    `Server is listening at ${process.env.HOST_URL}:${process.env.PORT}\n`
   );
 });
+
